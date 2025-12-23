@@ -53,9 +53,19 @@ public class ContactUsTest extends BaseTest{
 	}
 	@DataProvider(name ="contactUsData")
 	public Object[][] getData(){
-		String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
-		return ExcelUtils.readExcel(filePath, "contactUS");
+    String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
+    Object[][] data = ExcelUtils.readExcel(filePath, "contactUS");
 
-	}
+    // Convert file paths to absolute paths for the file column (last column)
+    for (int i = 0; i < data.length; i++) {
+        int fileColumnIndex = data[i].length - 1; // assuming last column is file path
+        String relativePath = (String) data[i][fileColumnIndex];
+        if (relativePath != null && !relativePath.isEmpty()) {
+            File file = new File(relativePath);
+            data[i][fileColumnIndex] = file.getAbsolutePath();
+        }
+    }
+    return data;
+}
 
 }
