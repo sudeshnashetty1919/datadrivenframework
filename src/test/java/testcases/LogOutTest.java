@@ -39,8 +39,9 @@ public class LogOutTest extends BaseTest {
 	
 	@DataProvider(name ="validCredentials")
 	public Object[][] getData(){
+		String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
+		return ExcelUtils.readExcel(filePath, "loginWithValid");
 		
-		return ExcelUtils.readExcel("C:\\\\Users\\\\DELL\\\\eclipse-workspace\\\\AutomationExercise\\\\src\\\\test\\\\resources\\\\testDate.xlsx", "loginWithValid");
 	}
 
 }
