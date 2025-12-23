@@ -53,7 +53,9 @@ public class ContactUsTest extends BaseTest{
 	}
 	@DataProvider(name ="contactUsData")
 	public Object[][] getData(){
-		return ExcelUtils.readExcel("C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx", "contactUS");
+		String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		return ExcelUtils.readExcel(filePath, "contactUS");
+
 	}
 
 }
