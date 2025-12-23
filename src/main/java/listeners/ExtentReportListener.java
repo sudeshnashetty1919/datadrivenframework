@@ -24,10 +24,12 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onStart(ITestContext context) {
-        ExtentSparkReporter spark = new ExtentSparkReporter("test-output/ExtentReport.html");
+        String reportPath = System.getProperty("user.dir") + "/test-output/ExtentReport.html";
+        ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
         extent = new ExtentReports();
         extent.attachReporter(spark);
     }
+
 
     @Override
     public void onTestStart(ITestResult result) {
