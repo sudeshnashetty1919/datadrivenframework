@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import factory.DriverFactory;
 
 import org.openqa.selenium.WebDriver;
-
+@Listeners(ExtentReportListener.class)
 public class BaseTest {
 
     public WebDriver driver;
