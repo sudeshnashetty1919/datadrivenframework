@@ -1,19 +1,19 @@
-name: Run Selenium Tests on Schedule
+name: Run Selenium Tests
 
 on:
+  workflow_dispatch:  # manual trigger
   schedule:
     - cron: '30 14 * * *'  # 8:30 PM IST
-  workflow_dispatch:
 
 jobs:
   selenium-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Java 11
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '11'
@@ -23,7 +23,9 @@ jobs:
         uses: browser-actions/setup-chrome@v1
 
       - name: Set up ChromeDriver
-        uses: webdrivers/setup-chromedriver@v2
+        uses: seleniumhq/setup-chromedriver@v2
+        with:
+          chromedriver-version: latest
 
       - name: Cache Maven packages
         uses: actions/cache@v3
