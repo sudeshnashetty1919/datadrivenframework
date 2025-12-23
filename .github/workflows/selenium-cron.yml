@@ -3,9 +3,9 @@ name: Run Selenium Tests on Schedule
 # Schedule using cron (every day at 6 AM UTC, adjust as needed)
 on:
   schedule:
-    - cron: '0 6 * * *'  
-  workflow_dispatch:  # allows manual trigger
-
+    - cron: '30 20 * * *'  # runs daily at 20:30 UTC
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ubuntu-latest
