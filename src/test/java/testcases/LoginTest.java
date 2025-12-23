@@ -72,7 +72,7 @@ public class LoginTest extends BaseTest {
 	@DataProvider(name = "userData")
 	public Object[][] getValidData(){
 		
-		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 		return ExcelUtils.readExcel(filePath, "login");
 
 		
@@ -82,7 +82,7 @@ public class LoginTest extends BaseTest {
 	@DataProvider(name = "invalidData")
 	public Object[][] getInvalidData(){
 		
-		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 		return ExcelUtils.readExcel(filePath, "invalidData");
 
 		
