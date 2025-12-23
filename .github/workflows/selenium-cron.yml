@@ -1,33 +1,40 @@
-name: Run Selenium Tests
+name: Run TestNG Selenium Suite
 
 on:
-  workflow_dispatch:  # manual trigger
   schedule:
-    - cron: '30 14 * * *'  # 8:30 PM IST
+    - cron: '30 14 * * *'   # 8:30 PM IST
+  workflow_dispatch:        # manual trigger
 
 jobs:
-  selenium-tests:
+  testng-suite:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      # 1️⃣ Checkout the repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Java
+      # 2️⃣ Set up Java
+      - name: Set up Java 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
+      # 3️⃣ Install Chrome browser
       - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
-
-      - name: Set up ChromeDriver
-        uses: seleniumhq/setup-chromedriver@v2
+        uses: browser-actions/setup-chrome@v2
         with:
-          chromedriver-version: latest
+          chrome-version: latest
+          install-dependencies: true
+          install-chromedriver: false
 
-      - name: Cache Maven packages
+      # 4️⃣ Install ChromeDriver
+      - name: Set up ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      # 5️⃣ Cache Maven dependencies
+      - name: Cache Maven
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -35,11 +42,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Run Maven Tests
-        run: mvn clean test
+      # 6️⃣ Run TestNG Suite
+      - name: Run TestNG Suite
+        run: mvn clean test -DsuiteXmlFile=testng.xml
 
-      - name: Upload Extent Report
+      # 7️⃣ Upload Extent Reports
+      - name: Upload Extent Reports
         uses: actions/upload-artifact@v4
         with:
-          name: ExtentReport
+          name: Extent Reports
           path: test-output/
