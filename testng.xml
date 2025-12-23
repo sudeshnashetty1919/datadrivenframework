@@ -3,6 +3,7 @@
         <listener class-name="listeners.ExtentReportListener"/>
     </listeners>
 
+
     <test name="All Tests">
         <classes>
             <class name="testcases.RegisterTestCase"/>
