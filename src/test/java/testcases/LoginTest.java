@@ -72,7 +72,9 @@ public class LoginTest extends BaseTest {
 	@DataProvider(name = "userData")
 	public Object[][] getValidData(){
 		
-		 return ExcelUtils.readExcel("C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx", "login");
+		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		return ExcelUtils.readExcel(filePath, "login");
+
 		
 		
 	}
@@ -80,7 +82,9 @@ public class LoginTest extends BaseTest {
 	@DataProvider(name = "invalidData")
 	public Object[][] getInvalidData(){
 		
-		 return ExcelUtils.readExcel("C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx", "invalidData");
+		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		return ExcelUtils.readExcel(filePath, "invalidData);
+
 		
 		
 	}
