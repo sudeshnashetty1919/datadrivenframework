@@ -37,28 +37,42 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        test.get().log(Status.PASS, "Test Passed");
+        if (test.get() != null)
+            test.get().log(Status.PASS, "Test Passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        test.get().log(Status.FAIL, result.getThrowable());
 
-        // Capture screenshot
+        // Safe check
+        if (test.get() != null) {
+            test.get().log(Status.FAIL, result.getThrowable());
+        }
+
+        // Screenshot Section: avoid NPE if driver is null
         try {
-            File src = ((TakesScreenshot) DriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
-            File dest = new File("test-output/screenshots/" + result.getMethod().getMethodName() + ".png");
-            dest.getParentFile().mkdirs(); // create folders if not exist
-            Files.copy(src.toPath(), dest.toPath());
-            test.get().addScreenCaptureFromPath(dest.getAbsolutePath());
-        } catch (IOException e) {
+            if (DriverFactory.getDriver() != null) {
+                File src = ((TakesScreenshot) DriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
+
+                File dest = new File("test-output/screenshots/" 
+                        + result.getMethod().getMethodName() + ".png");
+
+                dest.getParentFile().mkdirs(); 
+                Files.copy(src.toPath(), dest.toPath());
+
+                if (test.get() != null) {
+                    test.get().addScreenCaptureFromPath(dest.getAbsolutePath());
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        test.get().log(Status.SKIP, "Test Skipped");
+        if (test.get() != null)
+            test.get().log(Status.SKIP, "Test Skipped");
     }
 
     @Override
