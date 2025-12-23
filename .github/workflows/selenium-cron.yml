@@ -1,38 +1,30 @@
 name: Run Selenium Tests on Schedule
 
-# Schedule workflow: runs at 8:30 PM IST every day (14:00 UTC)
 on:
   schedule:
     - cron: '30 14 * * *'  # 8:30 PM IST
-  workflow_dispatch:        # allows manual trigger
+  workflow_dispatch:
 
 jobs:
   selenium-tests:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Set up Java 11
       - name: Set up Java 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
-      # 3. Set up Chrome browser
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
 
-      # 4. Set up ChromeDriver
       - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v1
-        with:
-          version: latest
+        uses: webdrivers/setup-chromedriver@v2
 
-      # 5. Cache Maven dependencies (optional)
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
@@ -41,13 +33,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 6. Run Selenium tests via Maven
       - name: Run Maven Tests
         run: mvn clean test
 
-      # 7. Upload Extent Report
       - name: Upload Extent Report
         uses: actions/upload-artifact@v4
         with:
           name: ExtentReport
-          path: test-output/ExtentReport.html
+          path: test-output/
