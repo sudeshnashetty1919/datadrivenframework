@@ -3,7 +3,7 @@ name: Run Selenium Tests on Schedule
 on:
   schedule:
     - cron: '0 15 * * *'  # 8:30 PM IST daily
-  workflow_dispatch:  # allows manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,7 +21,8 @@ jobs:
       - name: Set up Google Chrome
         uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: 'latest'
+          distribution: stable
+          chrome-version: latest
 
       - name: Install ChromeDriver
         run: |
