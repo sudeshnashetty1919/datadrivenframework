@@ -54,7 +54,7 @@ public class ExcelUtils {
     
     public static void writeLoginData(String email, String password, String name) {
 
-        String filePath = "C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx";
+        String filePath =  System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 
         try (FileInputStream fis = new FileInputStream(filePath);
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
@@ -94,7 +94,7 @@ public class ExcelUtils {
     
     public static void deleteLastLoginData() {
 
-        String filePath = "C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx";
+        String filePath =  System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 
         try (FileInputStream fis = new FileInputStream(filePath);
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
