@@ -83,14 +83,14 @@ public class RegisterTestCase extends BaseTest {
 
     @DataProvider(name = "userData")
     public Object[][] getData() {
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 		return ExcelUtils.readExcel(filePath, "registration");
 
     }
     
     @DataProvider(name = "registeredEmail")
     public Object[][] getRegisteredEmail() {
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 		return ExcelUtils.readExcel(filePath, "registeredEmail");
     }
 }
