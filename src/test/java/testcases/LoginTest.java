@@ -83,7 +83,7 @@ public class LoginTest extends BaseTest {
 	public Object[][] getInvalidData(){
 		
 		 String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
-		return ExcelUtils.readExcel(filePath, "invalidData);
+		return ExcelUtils.readExcel(filePath, "invalidData");
 
 		
 		
