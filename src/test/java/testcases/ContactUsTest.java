@@ -53,7 +53,7 @@ public class ContactUsTest extends BaseTest{
 	}
 	@DataProvider(name ="contactUsData")
 	public Object[][] getData(){
-		String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 		return ExcelUtils.readExcel(filePath, "contactUS");
 
 	}
