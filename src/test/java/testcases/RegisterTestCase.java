@@ -83,11 +83,14 @@ public class RegisterTestCase extends BaseTest {
 
     @DataProvider(name = "userData")
     public Object[][] getData() {
-        return ExcelUtils.readExcel("C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx", "registration");
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		return ExcelUtils.readExcel(filePath, "registration");
+
     }
     
     @DataProvider(name = "registeredEmail")
     public Object[][] getRegisteredEmail() {
-        return ExcelUtils.readExcel("C:\\Users\\DELL\\eclipse-workspace\\AutomationExercise\\src\\test\\resources\\testDate.xlsx", "registeredEmail");
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/testData.xlsx";
+		return ExcelUtils.readExcel(filePath, "registeredEmail");
     }
 }
