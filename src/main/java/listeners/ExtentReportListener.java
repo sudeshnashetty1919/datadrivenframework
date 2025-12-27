@@ -22,14 +22,37 @@ public class ExtentReportListener implements ITestListener {
     private static ExtentReports extent;
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
+ 
     @Override
     public void onStart(ITestContext context) {
-        String reportPath = System.getProperty("user.dir") + "/test-output/ExtentReport.html";
+
+        // Create folder with timestamp for each run
+        String timestamp = new java.text.SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new java.util.Date());
+        String reportDir = System.getProperty("user.dir") + "/test-output/ExtentReport_" + timestamp;
+
+        new File(reportDir).mkdirs();
+
+        String reportPath = reportDir + "/index.html";
+
         ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
+
+        // ---- BEST SETTINGS ----
+        spark.config().setDocumentTitle("Automation Test Report");
+        spark.config().setReportName("Selenium Test Execution Report");
+        spark.config().setTheme(com.aventstack.extentreports.reporter.configuration.Theme.DARK);
+
+        // This works ONLY for inside test logs
+        spark.config().setTimeStampFormat("dd-MM-yyyy HH:mm:ss");
+
         extent = new ExtentReports();
         extent.attachReporter(spark);
-    }
 
+        // Add environment info
+        extent.setSystemInfo("Executor", System.getProperty("user.name"));
+        extent.setSystemInfo("OS", System.getProperty("os.name"));
+        extent.setSystemInfo("Environment", "QA");
+        extent.setSystemInfo("Browser", "Chrome");
+    }
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -53,13 +76,15 @@ public class ExtentReportListener implements ITestListener {
 
         // Screenshot Section: avoid NPE if driver is null
         try {
-            if (DriverFactory.getDriver() != null) {
-                File src = ((TakesScreenshot) DriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
+            if (result.getStatus() == ITestResult.FAILURE) {
 
-                File dest = new File("test-output/screenshots/" 
+                File src = ((TakesScreenshot) DriverFactory.getDriver())
+                        .getScreenshotAs(OutputType.FILE);
+
+                File dest = new File("test-output/screenshots/"
                         + result.getMethod().getMethodName() + ".png");
 
-                dest.getParentFile().mkdirs(); 
+                dest.getParentFile().mkdirs();
                 Files.copy(src.toPath(), dest.toPath());
 
                 if (test.get() != null) {
@@ -69,6 +94,7 @@ public class ExtentReportListener implements ITestListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
