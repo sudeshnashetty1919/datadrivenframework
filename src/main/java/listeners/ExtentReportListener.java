@@ -14,7 +14,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 
 public class ExtentReportListener implements ITestListener {
@@ -22,36 +21,18 @@ public class ExtentReportListener implements ITestListener {
     private static ExtentReports extent;
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
- 
     @Override
     public void onStart(ITestContext context) {
-
-        // Create folder with timestamp for each run
-        String timestamp = new java.text.SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new java.util.Date());
-        String reportDir = System.getProperty("user.dir") + "/test-output/ExtentReport_" + timestamp;
-
-        new File(reportDir).mkdirs();
-
-        String reportPath = reportDir + "/index.html";
-
+    	String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+    	String reportPath = System.getProperty("user.dir") + "/test-output/ExtentReport_" + timestamp + ".html";
         ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
-
-        // ---- BEST SETTINGS ----
-        spark.config().setDocumentTitle("Automation Test Report");
-        spark.config().setReportName("Selenium Test Execution Report");
-        spark.config().setTheme(com.aventstack.extentreports.reporter.configuration.Theme.DARK);
-
-        // This works ONLY for inside test logs
+        
+        spark.config().setDocumentTitle("Framework Report");
+        spark.config().setReportName("Automation Execution");
         spark.config().setTimeStampFormat("dd-MM-yyyy HH:mm:ss");
 
         extent = new ExtentReports();
         extent.attachReporter(spark);
-
-        // Add environment info
-        extent.setSystemInfo("Executor", System.getProperty("user.name"));
-        extent.setSystemInfo("OS", System.getProperty("os.name"));
-        extent.setSystemInfo("Environment", "QA");
-        extent.setSystemInfo("Browser", "Chrome");
     }
 
     @Override
@@ -62,45 +43,34 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        if (test.get() != null)
-            test.get().log(Status.PASS, "Test Passed");
+        test.get().log(Status.PASS, "Test Passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
 
-        // Safe check
-        if (test.get() != null) {
-            test.get().log(Status.FAIL, result.getThrowable());
-        }
+        test.get().log(Status.FAIL, result.getThrowable());
 
-        // Screenshot Section: avoid NPE if driver is null
         try {
-            if (result.getStatus() == ITestResult.FAILURE) {
+            File src = ((TakesScreenshot) DriverFactory.getRawDriver())
+                    .getScreenshotAs(OutputType.FILE);
 
-                File src = ((TakesScreenshot) DriverFactory.getDriver())
-                        .getScreenshotAs(OutputType.FILE);
+            File dest = new File("test-output/screenshots/"
+                    + result.getMethod().getMethodName() + ".png");
 
-                File dest = new File("test-output/screenshots/"
-                        + result.getMethod().getMethodName() + ".png");
+            dest.getParentFile().mkdirs();
+            Files.copy(src.toPath(), dest.toPath());
 
-                dest.getParentFile().mkdirs();
-                Files.copy(src.toPath(), dest.toPath());
+            test.get().addScreenCaptureFromPath(dest.getAbsolutePath());
 
-                if (test.get() != null) {
-                    test.get().addScreenCaptureFromPath(dest.getAbsolutePath());
-                }
-            }
         } catch (Exception e) {
-            e.printStackTrace();
+            test.get().log(Status.WARNING, "Failed to attach screenshot: " + e.getMessage());
         }
-
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        if (test.get() != null)
-            test.get().log(Status.SKIP, "Test Skipped");
+        test.get().log(Status.SKIP, "Test Skipped");
     }
 
     @Override
