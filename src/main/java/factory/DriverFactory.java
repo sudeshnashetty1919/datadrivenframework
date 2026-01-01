@@ -31,7 +31,7 @@ public class DriverFactory {
         options.addArguments("--disable-extensions");
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
-        //options.addArguments("--headless=new");   // FIX for proper screenshots
+        options.addArguments("--headless=new");   // FIX for proper screenshots
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--remote-allow-origins=*");
 

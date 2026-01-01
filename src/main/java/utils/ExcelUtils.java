@@ -54,25 +54,48 @@ public class ExcelUtils {
     
     public static void writeLoginData(String email, String password, String name) {
 
-        String filePath =  System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/testDate.xlsx";
 
-        try (FileInputStream fis = new FileInputStream(filePath);
-             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
+        FileInputStream fis = null;
+        XSSFWorkbook wb = null;
+
+        try {
+            // Open the Excel file
+            fis = new FileInputStream(filePath);
+            wb = new XSSFWorkbook(fis);
 
             XSSFSheet sheet = wb.getSheet("login");
 
             int rowIndex = -1;
 
-            // Find first truly empty row
+            // Find the first empty row
             for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+
                 Row row = sheet.getRow(i);
-                if (row == null || row.getCell(0) == null) {
+
+                if (row == null) {
+                    rowIndex = i;
+                    break;
+                }
+
+                boolean isEmpty = true;
+
+                for (int c = 0; c < 3; c++) {
+                    Cell cell = row.getCell(c);
+
+                    if (cell != null && cell.getCellType() != CellType.BLANK) {
+                        isEmpty = false;
+                        break;
+                    }
+                }
+
+                if (isEmpty) {
                     rowIndex = i;
                     break;
                 }
             }
 
-            // if no empty row found → append at end
+            // If no empty row found → add new row
             if (rowIndex == -1) {
                 rowIndex = sheet.getLastRowNum() + 1;
             }
@@ -83,14 +106,24 @@ public class ExcelUtils {
             row.createCell(1).setCellValue(password);
             row.createCell(2).setCellValue(name);
 
-            try (FileOutputStream fos = new FileOutputStream(filePath)) {
-                wb.write(fos);
-            }
+            // Write data back to Excel
+            FileOutputStream fos = new FileOutputStream(filePath);
+            wb.write(fos);
+            fos.close();
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            // Close workbook + FileInputStream
+            try {
+                if (wb != null) wb.close();
+                if (fis != null) fis.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
+
     
     public static void deleteLastLoginData() {
 

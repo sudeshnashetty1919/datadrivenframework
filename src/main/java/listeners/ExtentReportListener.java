@@ -23,10 +23,15 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onStart(ITestContext context) {
-    	String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-    	String reportPath = System.getProperty("user.dir") + "/test-output/ExtentReport_" + timestamp + ".html";
+
+        String timestamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        String reportDir = System.getProperty("user.dir") + "/test-output/" + timestamp;
+        new File(reportDir).mkdirs();
+
+        String reportPath = reportDir + "/ExtentReport.html";
+
         ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
-        
+
         spark.config().setDocumentTitle("Framework Report");
         spark.config().setReportName("Automation Execution");
         spark.config().setTimeStampFormat("dd-MM-yyyy HH:mm:ss");
@@ -34,6 +39,7 @@ public class ExtentReportListener implements ITestListener {
         extent = new ExtentReports();
         extent.attachReporter(spark);
     }
+
 
     @Override
     public void onTestStart(ITestResult result) {
