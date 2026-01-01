@@ -2,36 +2,34 @@ name: Run TestNG Selenium Suite
 
 on:
   schedule:
-    - cron: '30 14 * * *'
+    - cron: '30 14 * * *'   # 8:30 PM IST
   workflow_dispatch:
-
-permissions:
-  contents: write   # 🔥 to allow Git push
 
 jobs:
   testng-suite:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up Java
       - name: Set up Java 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Set up Chrome
+      # 3️⃣ Install Chrome (includes dependencies)
+      - name: Install Chrome
         uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: latest
           install-dependencies: true
-          install-chromedriver: false
+          install-chromedriver: true   # FIX: match Chrome version automatically
 
-      - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
+      # 4️⃣ Cache Maven
       - name: Cache Maven
         uses: actions/cache@v3
         with:
@@ -40,10 +38,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      # 5️⃣ Run TestNG Suite
       - name: Run TestNG Suite
         run: mvn clean test -DsuiteXmlFile=testng.xml
 
-      # Push updated report
+      # 6️⃣ Upload Extent Reports
+      - name: Upload Extent Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: Extent Reports
+          path: test-output/
       - name: Push updated Extent Report to GitHub
         run: |
           git config user.name "github-actions"
