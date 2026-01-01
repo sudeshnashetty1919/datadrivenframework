@@ -3,14 +3,14 @@ name: Run TestNG Selenium Suite
 on:
   schedule:
     - cron: '30 14 * * *'   # 8:30 PM IST
-  workflow_dispatch:        # manual trigger
+  workflow_dispatch:
 
 jobs:
   testng-suite:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -21,19 +21,15 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      # 3️⃣ Install Chrome browser
-      - name: Set up Chrome
+      # 3️⃣ Install Chrome (includes dependencies)
+      - name: Install Chrome
         uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: latest
           install-dependencies: true
-          install-chromedriver: false
+          install-chromedriver: true   # FIX: match Chrome version automatically
 
-      # 4️⃣ Install ChromeDriver
-      - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
-      # 5️⃣ Cache Maven dependencies
+      # 4️⃣ Cache Maven
       - name: Cache Maven
         uses: actions/cache@v3
         with:
@@ -42,11 +38,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 6️⃣ Run TestNG Suite
+      # 5️⃣ Run TestNG Suite
       - name: Run TestNG Suite
         run: mvn clean test -DsuiteXmlFile=testng.xml
 
-      # 7️⃣ Upload Extent Reports
+      # 6️⃣ Upload Extent Reports
       - name: Upload Extent Reports
         uses: actions/upload-artifact@v4
         with:
