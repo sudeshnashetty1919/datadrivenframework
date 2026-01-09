@@ -33,7 +33,7 @@ public class LogOutTest extends BaseTest {
 		lP.click_on_LogOut();
 		
 		Assert.assertEquals(lP.getWelcomeText(), "Login to your account");
-		
+		System.out.println("logout");
 	}
 	
 	
