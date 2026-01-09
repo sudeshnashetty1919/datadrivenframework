@@ -64,6 +64,7 @@ public class RegisterTestCase extends BaseTest {
         su.click_on_deleteAccount();
         Assert.assertEquals(su.confirm_Account_Deletion(), "ACCOUNT DELETED!");
         su.click_on_ContinueAfter_deletion();
+		System.out.println("registration and deletion");
            
         
     }
@@ -78,7 +79,7 @@ public class RegisterTestCase extends BaseTest {
         su.enter_Email(email);
         su.click_On_Submit();
         Assert.assertEquals(su.getSignUpErrorMessage(), "Email Address already exist!");
-        
+        System.out.println("registration with already email");
     }
 
     @DataProvider(name = "userData")
