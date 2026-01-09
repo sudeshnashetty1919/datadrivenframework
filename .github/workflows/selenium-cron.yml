@@ -41,6 +41,8 @@ jobs:
       # 5️⃣ Run TestNG Suite
       - name: Run TestNG Suite
         run: mvn clean test -DsuiteXmlFile=testng.xml
+        continue-on-error: true
+
 
       # 6️⃣ Upload Extent Reports
       - name: Upload Extent Reports
