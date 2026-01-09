@@ -46,6 +46,7 @@ public class LoginTest extends BaseTest {
 		su.click_on_ContinueAfter_deletion();
 		
 		ExcelUtils.deleteLastLoginData();
+		System.out.println("login");
 			
 	}
 	
@@ -67,6 +68,7 @@ public class LoginTest extends BaseTest {
 		lP.click_on_LoginButton();
 		
 		Assert.assertEquals(lP.getErrorMessage(),"Your email or password is incorrect!" );
+		System.out.println("login2");
 	}
 	
 	@DataProvider(name = "userData")
