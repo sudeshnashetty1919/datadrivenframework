@@ -16,6 +16,7 @@ public class ValidateTestCasesPages extends BaseTest{
 		tP.click_On_testCases();
 		
 		Assert.assertTrue(tP.getPageHeading().equalsIgnoreCase("Test Cases"));
+		System.out.println("test cases page");
 	}
 
 }
